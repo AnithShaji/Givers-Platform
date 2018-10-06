@@ -1,0 +1,137 @@
+﻿@model IList<e_Welfare.DTO.ViewModel.PermissionsViewModel>
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Settings
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-users"></i> Settings
+            </li>
+            <li class="active">
+                User Permission
+            </li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("SavePermissionDetails", "AdminDashboard"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Application #</th>
+
+                                <th>Applicant Name</th>
+                                <th>Add</th>
+                                <th>Edit</th>
+
+
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                            @if (Model != null && Model.Count() > 0)
+                            {
+                                for(var i = 0; i< Model.Count(); i++)
+                                {
+
+                                    <tr>
+                                        <td> 
+                                            @Html.DisplayFor(modelItem => modelItem[i].ApplicantStringID)
+                                        </td>
+                                        @Html.HiddenFor(modelItem => modelItem[i].PermissionId)
+                                        @Html.HiddenFor(modelItem => modelItem[i].UserID)
+                                        @*<td hidden>@applicant.PermissionName</td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => modelItem[i].ApplicantName, new { id = "NameOfApplicant" })
+                                            @Html.HiddenFor(modelItem => modelItem[i].ApplicantName)
+                                        </td>
+
+                                        <td align="center">
+                                            @Html.CheckBoxFor(modelItem => modelItem[i].Add)
+                                            @* <input type="checkbox" class="setNav" id="chkbxAccess_@applicant.PermissionId" @(applicant.Add ? "checked=\"checked\"" : "") name="checkbox-inline">*@
+                                        </td>
+
+                                        <td align="center">
+                                            @Html.CheckBoxFor(modelItem => modelItem[i].Edit)
+                                            @*<input type="checkbox" class="setNav" id="chkbxAccess_@applicant.PermissionId" @(applicant.Edit ? "checked=\"checked\"" : "") name="checkbox-inline">*@
+                                        </td>
+
+
+
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+
+                                <tr><td colspan="6" align="center">--- No Permissions Listed ---</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+          
+                <hr />
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="smart-form">
+                            <fieldset>
+
+
+                                <section class="pull-right">
+                                    <a class="btn btn-cancel btn-sm" title="Cancel" href="#" onclick="return HidePopup()">
+                                        Cancel
+                                    </a>
+                                    @*<a href="@Url.Action("RoleListing", "PatientListing", new { Area = "Client" })"><button type="button" title="Cancel" class="btn btn-cancel btn-sm">Cancel</button></a>*@
+
+
+                                    <button type="submit" title="Save" id="SubmitNewApplicant" class="btn btn-primary btn-sm">Save</button>
+
+                                </section>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+
+    //$(document).ready(function () {
+    //    $('[data-toggle="popover"]').popover();
+    //});
+
+    //var chekdMedicineIds = [];
+
+    //$("input:checkbox[class=chkclass]").change(function () {
+
+
+    //    if ($(this).is(":checked")) {
+
+    //        var medicineid = $(this).attr("value");
+
+    //        chekdMedicineIds.push(medicineid);
+
+    //    }
+
+    //    $("#MedicineListIds").val(chekdMedicineIds);
+    //});
+
+
+</script>

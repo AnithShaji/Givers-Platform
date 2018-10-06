@@ -1,0 +1,75 @@
+﻿
+@model  e_Welfare.DTO.ViewModel.ClientDashboardTypeViewModel
+
+
+    <div class="container">
+        <h2>Application Under Processing</h2>
+        <p>Please Select Your Required Section that you need support : </p>
+        <form>
+            <label class="checkbox-inline">
+               
+                <input type="checkbox"  class="setType" id="chkbxAccess_M" @(Model.MedicalSection ? "checked=\"checked\"" : "") name="checkbox-inline">Medical
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" class="setType" id="chkbxAccess_E" @(Model.EducationSection ? "checked=\"checked\"" : "") name="checkbox-inline">Education
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" class="setType" id="chkbxAccess_F" @(Model.FoodSection ? "checked=\"checked\"" : "") name="checkbox-inline">Food
+           
+            </label>
+
+            <section >
+                @*<a href="@Url.Action("RoleListing", "PatientListing", new { Area = "Client" })"><button type="button" title="Cancel" class="btn btn-cancel btn-sm">Cancel</button></a>*@
+                <button type="button" title="Save" id="SubmitClientDasbrdType" class="btn btn-primary btn-sm">Save</button>
+            </section>
+        </form>
+        <div class="smart-form">
+            <fieldset>
+
+
+            </fieldset>
+        </div>
+    </div>
+
+<script>
+
+    
+
+
+    $("#SubmitClientDasbrdType").on("click", function (e) {
+
+
+        var chekdSections = [];
+
+        $("input:checkbox[class=setType]").each(function () {
+
+            if ($(this).is(":checked")) {
+                var chekdSec = $(this).attr("id").replace('chkbxAccess_', '');
+                chekdSections.push(chekdSec);
+
+                //$(("#chkbxSetHome_" + $(this).attr("id").replace('chkbxAccess_', ''))).prop("disabled", false);
+            }
+        });
+
+
+                $.ajax({
+                    url: '@Url.Action("CheckedClientSection")',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+            type: "POST",
+            data: JSON.stringify(chekdSections),
+
+            success: function (result) {
+
+                SuccesMessage("Saved successfully.", "Information");
+
+
+                //$('#excelDataTable').html("");
+                //buildHtmlTable(resultData, '#excelDataTable');
+
+            }
+        });
+
+
+    });
+</script>

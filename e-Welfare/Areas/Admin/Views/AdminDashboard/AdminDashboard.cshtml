@@ -1,0 +1,502 @@
+﻿<script type="text/javascript">
+    // In the view:
+    $(document).ready(function () {
+
+        @if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="1")
+        {
+            @:SuccesMessage("Saved successfully.", "Information");
+            TempData.Remove("SucessAlert");
+        }
+        else if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="0")
+        {
+            @:ErrorMessage("Error while saving the records.", "Warning");
+            TempData.Remove("SucessAlert");
+        }
+        else if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="2")
+        {
+            @:SuccesMessage("Updated successfully", "Information");
+            TempData.Remove("SucessAlert");
+        }
+    });
+</script>
+<div id="content" class="container-fluid">
+    <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Dashboard <small>Admin</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Dashboard
+                </li>
+            </ol>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <i class="fa fa-info-circle"></i>
+                @*<strong>Like SB Admin?</strong> Try out
+                    <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">
+                    SB Admin 2
+                        </a>
+                    for additional features!*@
+
+                <strong>Current Application Status !</strong>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-comments fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div id="NwAppln" class="huge">0</div>
+                            <div>New Applications</div>
+                        </div>
+                    </div>
+                </div>
+                <a onclick="LoadTableContent('NEW')">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-shopping-cart fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div id="PrcsAppln" class="huge">0</div>
+                            <div>Application In Process</div>
+                        </div>
+                    </div>
+                </div>
+                <a onclick="LoadTableContent('INP')">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-tasks fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div id="AcptdAppln" class="huge">0</div>
+                            <div>Accepted Application</div>
+                        </div>
+                    </div>
+                </div>
+                <a onclick="LoadTableContent('ACC')">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-red">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-support fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div id="RejAppln" class="huge">0</div>
+                            <div>Rejected Application</div>
+                        </div>
+                    </div>
+                </div>
+                <a onclick="LoadTableContent('REJ')">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="contentTbl">
+             
+            </div>
+        </div>
+    </div>
+    
+    <!-- /.row -->
+
+    <div class="row">
+        <div id="pie-chart" class="col-md-6" height="200"></div>
+        <div id="pie-chart2"class="col-md-6" height="200"></div>
+
+
+    </div>
+    <div class="row">
+      
+        <div align="center">
+            <svg id="visualisation" width="500" height="500"></svg>
+            </div>
+            <div align="center">Graph: Total v/s Rejected Applicants</div>
+        </div>
+    </div>
+
+
+    <script src="~/Content/js/plugins/D3.js/d3.v4.min.js"></script>
+    <script>
+        (function (d3) {
+            'use strict';
+
+                    //function GetMedicineInventory() {
+            var element = {};
+            //var dataset = [];
+            var dataset = [{
+                "label": "Paracetamol",
+                "count": "30"
+            }, {
+                "label": "Brufin",
+                "count": "20"
+            }, {
+                "label": "Aspirin",
+                "count": "70"
+            }, {
+                "label": "Saradon",
+                "count": "10"
+            }, {
+                "label": "Calcium sandos",
+                "count": "90"
+            }];
+            
+            $.ajax({
+                url: '@Url.Action("GetMedicineInventory", "AdminDashboard", new { Area = "Admin" })',
+                type: 'GET',
+                dataType: 'json',
+                // we set cache: false because GET requests are often cached by browsers
+                // IE is particularly aggressive in that respect
+                //cache: false,
+
+                success: function (result) {
+                   
+                    element.label = 'dfg';
+                    element.count = 52;
+                    dataset.push(element);
+                    for (var i = 0; i < result.Inventory.length; i++) {
+
+                       dataset = [{ label: result.Inventory[i].MedicineName , count: result.Inventory[i].Quantity }];
+                        console.log(datase);
+                    }
+             
+                }
+            });
+                
+
+        
+            var width = 360;
+            var height = 360;
+            var radius = Math.min(width, height) / 2;
+            var donutWidth = 75;
+            var legendRectSize = 18;                                  // NEW
+            var legendSpacing = 4;                                    // NEW
+
+            var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+            var svg = d3.select('#pie-chart')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', 'translate(' + (width / 2) +
+                ',' + (height / 2) + ')');
+
+            var arc = d3.arc()
+                .innerRadius(radius - donutWidth)
+                .outerRadius(radius);
+
+            var pie = d3.pie()
+                .value(function (d) { return d.count; })
+                .sort(null);
+
+            var path = svg.selectAll('path')
+                .data(pie(dataset))
+                .enter()
+                .append('path')
+                .attr('d', arc)
+                .attr('fill', function (d, i) {
+                    return color(d.data.label);
+                });
+
+            var legend = svg.selectAll('.legend')                     // NEW
+                .data(color.domain())                                   // NEW
+                .enter()                                                // NEW
+                .append('g')                                            // NEW
+                .attr('class', 'legend')                                // NEW
+                .attr('transform', function (d, i) {                     // NEW
+                    var height = legendRectSize + legendSpacing;          // NEW
+                    var offset = height * color.domain().length / 2;     // NEW
+                    var horz = -2 * legendRectSize;                       // NEW
+                    var vert = i * height - offset;                       // NEW
+                    return 'translate(' + horz + ',' + vert + ')';        // NEW
+                });                                                     // NEW
+
+            legend.append('rect')                                     // NEW
+                .attr('width', legendRectSize)                          // NEW
+                .attr('height', legendRectSize)                         // NEW
+                .style('fill', color)                                   // NEW
+                .style('stroke', color);                                // NEW
+
+            legend.append('text')                                     // NEW
+                .attr('x', legendRectSize + legendSpacing)              // NEW
+                .attr('y', legendRectSize - legendSpacing)              // NEW
+                .text(function (d) { return d; });                       // NEW
+
+        })(window.d3);
+    </script>
+<script>
+        (function (d3) {
+            'use strict';
+
+                    //function GetMedicineInventory() {
+            var element = {};
+            //var dataset = [];
+            var dataset = [{
+                "label": "Rice",
+                "count": "90"
+            }, {
+                "label": "Wheat",
+                "count": "60"
+            }, {
+                "label": "Sugar",
+                "count": "70"
+            }, {
+                "label": "Bread",
+                "count": "50"
+            }];
+
+           
+
+
+            var width = 360;
+            var height = 360;
+            var radius = Math.min(width, height) / 2;
+            var donutWidth = 75;
+            var legendRectSize = 18;                                  // NEW
+            var legendSpacing = 4;                                    // NEW
+
+            var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+            var svg = d3.select('#pie-chart2')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .append('g')
+                .attr('transform', 'translate(' + (width / 2) +
+                ',' + (height / 2) + ')');
+
+            var arc = d3.arc()
+                .innerRadius(radius - donutWidth)
+                .outerRadius(radius);
+
+            var pie = d3.pie()
+                .value(function (d) { return d.count; })
+                .sort(null);
+
+            var path = svg.selectAll('path')
+                .data(pie(dataset))
+                .enter()
+                .append('path')
+                .attr('d', arc)
+                .attr('fill', function (d, i) {
+                    return color(d.data.label);
+                });
+
+            var legend = svg.selectAll('.legend')                     // NEW
+                .data(color.domain())                                   // NEW
+                .enter()                                                // NEW
+                .append('g')                                            // NEW
+                .attr('class', 'legend')                                // NEW
+                .attr('transform', function (d, i) {                     // NEW
+                    var height = legendRectSize + legendSpacing;          // NEW
+                    var offset = height * color.domain().length / 2;     // NEW
+                    var horz = -2 * legendRectSize;                       // NEW
+                    var vert = i * height - offset;                       // NEW
+                    return 'translate(' + horz + ',' + vert + ')';        // NEW
+                });                                                     // NEW
+
+            legend.append('rect')                                     // NEW
+                .attr('width', legendRectSize)                          // NEW
+                .attr('height', legendRectSize)                         // NEW
+                .style('fill', color)                                   // NEW
+                .style('stroke', color);                                // NEW
+
+            legend.append('text')                                     // NEW
+                .attr('x', legendRectSize + legendSpacing)              // NEW
+                .attr('y', legendRectSize - legendSpacing)              // NEW
+                .text(function (d) { return d; });                       // NEW
+
+        })(window.d3);
+</script>
+    <script src="~/Content/js/plugins/D3.js/d3.v3.min.js"></script>
+    <script>
+
+        var data = [{
+            "sale": "202",
+            "year": "2000"
+        }, {
+            "sale": "215",
+            "year": "2001"
+        }, {
+            "sale": "179",
+            "year": "2002"
+        }, {
+            "sale": "199",
+            "year": "2003"
+        }, {
+            "sale": "164",
+            "year": "2003"
+        }, {
+            "sale": "176",
+            "year": "2010"
+        }];
+
+        var data2 = [{
+            "sale": "190",
+            "year": "2000"
+        }, {
+            "sale": "171",
+            "year": "2002"
+        }, {
+            "sale": "162",
+            "year": "2004"
+        }, {
+            "sale": "143",
+            "year": "2006"
+        }, {
+            "sale": "146",
+            "year": "2008"
+        }, {
+            "sale": "147",
+            "year": "2010"
+        }];
+
+        var vis = d3.select("#visualisation"),
+            WIDTH = 500,
+            HEIGHT = 500,
+            MARGINS = {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 50
+            },
+            xScale = d3.scale.linear().range(
+                [MARGINS.left, WIDTH - MARGINS.right]).domain([2000, 2010]),
+            yScale = d3.scale.linear().range(
+                [HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134, 215]),
+            xAxis = d3.svg.axis()
+                .scale(xScale),
+
+            yAxis = d3.svg.axis()
+                .scale(yScale)
+                .orient("left");
+
+        //vis.append("svg:g")
+        //    .call(xAxis);
+
+        // add xy-axis to the svg
+        vis.append("svg:g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+            .call(xAxis);
+
+        vis.append("svg:g")
+            .attr("class", "axis")
+            .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+            .call(yAxis);
+
+        // draw the data
+        var lineGen = d3.svg.line()
+            .x(function (d) {
+                return xScale(d.year);
+            })
+            .y(function (d) {
+                return yScale(d.sale);
+            })
+            .interpolate("basis");
+
+        // add data
+        vis.append('svg:path')
+            .attr('d', lineGen(data))
+            .attr('stroke', 'green')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
+
+        // add data 2
+        vis.append('svg:path')
+            .attr('d', lineGen(data2))
+            .attr('stroke', 'blue')
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
+    </script>
+    <script>
+    $(document).ready(function () {
+        // On first load
+        LoadTableContent("NEW");
+
+    });
+
+    function LoadTableContent(tabClicked) {
+
+        ////var32 clickElmnt = tab + 'Clicked';
+
+        ////if ($("#" + clickElmnt).val() == 'false') {
+        $("#contentTbl").empty();
+
+        $("#contentTbl").load('@Url.Action("ApplicantListPartialView", "AdminDashboard", new { Area = "Admin" })', { tabName: tabClicked }, function () {
+            GetStatusCount();
+                //$("#" + clickElmnt).val('true');
+        });
+
+        function GetStatusCount() {
+
+            $.ajax({
+                url: '@Url.Action("GetStatusCount", "AdminDashboard", new { Area = "Admin" })',
+                type: 'GET',
+                dataType: 'json',
+                // we set cache: false because GET requests are often cached by browsers
+                // IE is particularly aggressive in that respect
+                //cache: false,
+                success: function (result) {
+                    $('#NwAppln').html(result.Status[0]);
+                    $('#PrcsAppln').html(result.Status[1]);
+                    $('#AcptdAppln').html(result.Status[2]);
+                    $('#RejAppln').html(result.Status[3]);
+                }
+            });
+        }
+    }
+    </script>

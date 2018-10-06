@@ -1,0 +1,328 @@
+﻿@model e_Welfare.DTO.ViewModel.ApplicantViewModel
+
+
+<script src="~/Content/js/plugins/datepicker/moment.min.js"></script>
+<script src="~/Content/js/plugins/datepicker/bootstrap-datepicker.min.js"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        $('form').removeData('validator');
+
+        $('form').removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse('form');
+        $(function () {
+            $("#DOB").datepicker();
+        });
+    });
+
+
+</script>
+
+@*<style>
+        .tooltips {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+            .tooltips .tooltiptext {
+                visibility: hidden;
+                width: 120px;
+                background-color: black ;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                position: absolute;
+                z-index: 1;
+                top: -5px;
+                left: 110%;
+            }
+
+                .tooltips .tooltiptext::after {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    right: 100%;
+                    margin-top: -5px;
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: transparent black transparent transparent;
+                }
+
+            .tooltips:hover .tooltiptext {
+                visibility: visible;
+            }
+    </style>*@
+
+<div id="content">
+
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div>
+
+            <header>
+                <h2>Edit Applicant Details</h2>
+
+
+            </header>
+            @*<div class="tooltips">
+                    Hover over me
+                    <span class="tooltiptext">Tooltip text</span>
+                </div>*@
+
+            <div class="panel">
+
+                @*@using (Ajax.BeginForm("SavePatientDetails", "ClientListing", new AjaxOptions { HttpMethod = "POST", enctype = "multipart/form-data" }))*@
+                @using (@Html.BeginForm("SavePatientDetails", "ClientListing", FormMethod.Post, new { @class = "smart-form client-form login-form login active", enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(x => x.UserID)
+                    @Html.HiddenFor(x => x.UserType)
+                    if (Model.UserType == "ADMN")
+                    {
+
+                        @Html.HiddenFor(x => x.FoodListIds)
+                    }
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Name<span class="mandatory">*</span></label>
+                            @Html.TextBoxFor(m => m.FirstName, new { Class = "form-control", Placeholder = "Enter First Name" })
+                            @Html.ValidationMessageFor(m => m.FirstName)
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Middle Name<span class="mandatory">*</span></label>
+                            @Html.TextBoxFor(m => m.MiddleName, new { Class = "form-control", Placeholder = "Enter Middle Name" })
+                            @Html.ValidationMessageFor(m => m.MiddleName)
+                        </div>
+                        <div class="col-md-4">
+                            <label>Last Name<span class="mandatory">*</span></label>
+                            @Html.TextBoxFor(m => m.LastName, new { Class = "form-control", Placeholder = "Enter Last Name" })
+                            @Html.ValidationMessageFor(m => m.LastName)
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <label>Address Line 1<span class="mandatory">*</span></label>
+                            @* <input type="text" class="form-control" id="Address1" placeholder="Enter Address Line 1">*@
+                            @Html.TextBoxFor(m => m.Address1, new { maxlength = "200", Class = "form-control", Placeholder = "Enter Address Line 1" })
+                            @Html.ValidationMessageFor(model => model.Address1)
+                        </div>
+                        <div class="col-md-4">
+                            <label>Address Line 2<span class="mandatory">*</span></label>
+                            @*<input type="text" class="form-control" id="Address2" placeholder="Enter Address Line 2">*@
+                            @Html.TextBoxFor(m => m.Address2, new { maxlength = "200", Class = "form-control", Placeholder = "Enter Address Line 2" })
+                            @Html.ValidationMessageFor(model => model.Address2)
+                        </div>
+                        <div class="col-md-4">
+                            <label>Flat / House Number</label>
+                            @* <input type="text" class="form-control" id="FlatHouseNameNumber" placeholder="Enter Flat / House Number">*@
+                            @Html.TextBoxFor(m => m.FlatHouseNameNumber, new { Class = "form-control", Placeholder = "Enter Flat / House Number" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-4">
+                            <label>City</label>
+                            @* <input type="text" class="form-control" id="City" placeholder="Enter City">*@
+                            @Html.TextBoxFor(m => m.City, new { Class = "form-control", Placeholder = "Enter City" })
+                            @Html.ValidationMessageFor(model => model.City)
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Country</label>
+                            @* <input type="text" class="form-control" id="City" placeholder="Enter City">*@
+                            @Html.TextBoxFor(m => m.Country, new { Class = "form-control", Placeholder = "Enter Country" })
+                            @Html.ValidationMessageFor(model => model.Country)
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label>Telephone</label>
+                            @*<input type="text" class="form-control" id="Telephone" autofocus="autofocus" placeholder="Enter Telephone Number">*@
+                            @Html.TextBoxFor(m => m.Telephone, new { Class = "form-control", Placeholder = "Enter Telephone Number" })
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-4">
+                            <label>Mobile<span class="mandatory">*</span></label>
+                            @*<input type="text" class="form-control" id="Mobile" placeholder="Enter Mobile Number">*@
+                            @Html.TextBoxFor(m => m.Mobile, new { maxlength = "25", Class = "form-control", Placeholder = "Enter Mobile Number" })
+                            @Html.ValidationMessageFor(model => model.Mobile)
+
+                        </div>
+                        <div class="col-md-4">
+                            <label>Date of Birth</label>
+                            @Html.TextBoxFor(m => m.DOB, new { Class = "form-control", Placeholder = "Enter DOB" })
+                            @Html.ValidationMessageFor(m => m.DOB)
+
+
+                        </div>
+                        @if (Model.UserType == "ADMN")
+                        {
+
+
+                            <div class="col-md-4">
+                                <label>Delivery Status</label>
+
+                                @Html.CheckBoxFor(m => m.DeliveryChecked)
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <label >Attached Document</label>
+                                @*@Html.TextBoxFor(m => m., new { type = "file" })
+                                @if (string.IsNullOrEmpty(Model.Attachment))
+                                {
+                                    @Html.ValidationMessageFor(m => m.MedReceipt)
+                                }*@
+                                @*else { }*@
+
+                                @*<input type="file" name="files" class="form-control-file" aria-describedby="fileHelp">*@
+                                @*<small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>*@
+
+
+
+
+                                @if (!string.IsNullOrEmpty(Model.Attachment))
+                    {
+
+                        string tag = "<a style='cursor: pointer' href = '" + Url.Content(Model.Attachment) + "'><span class='glyphicon glyphicon-envelope'></span> Attached Document</a>";
+
+                                    <div>@Html.Raw(tag)</div>
+                                }
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <label>Food Items Delivered </label>
+                            <div id="divStudentlist" style="height: 100px; overflow: auto;  width: 150px;">
+                                @if (Model.FoodList != null && Model.FoodList.Count > 0 && Model.FoodSelectedIds != null && Model.FoodSelectedIds.Count > 0)
+                                {
+
+                                    foreach (var items in Model.FoodList)
+                                    {
+
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="20px">
+                                                    @if (Model.FoodSelectedIds.Contains(items.Value))
+                                                    {
+                                                        <input type="checkbox" value="@items.Value" checked class="chkclass" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" value="@items.Value" class="chkclass" />
+                                                    }
+
+
+                                                </td>
+                                                <td width="100px">
+                                                    @items.Text
+                                                </td>
+                                            </tr>
+
+                                        </table>
+
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    @*@Html.Label(" PendingMsg","Item delivery pending", new { Class = "form-control" });*@
+                                    <p style="color:red">Item delivery pending </p>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <hr />
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="smart-form">
+                                        <fieldset>
+                                            <section class="pull-left">@Html.Partial("_Mandatory") </section>
+
+                                            <section class="pull-right">
+
+                                                <a class="btn btn-cancel btn-sm" title="Cancel" href="#" onclick="return HidePopup()">
+                                                    Cancel
+                                                </a>
+                                                <button type="submit" class="btn btn-primary btn-sm" title="Save" id="btnSave">
+                                                    Save
+                                                </button>
+                                            </section>
+                                        </fieldset>
+                                    </div>
+
+                                </div>
+                            </div>
+                }
+
+            </div>
+
+        </div>
+    </article>
+
+
+
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+
+    var chekdMedicineIds = [];
+
+    $("input:checkbox[class=chkclass]").change(function () {
+
+
+        if ($(this).is(":checked")) {
+
+            var medicineid = $(this).attr("value");
+
+            chekdMedicineIds.push(medicineid);
+
+        }
+
+        $("#MedicineListIds").val(chekdMedicineIds);
+    });
+
+    if ('@Model.UserType'!='ADMN'){
+        $('.chkclass').attr('disabled', true);
+    }
+
+    function HidePopup()
+    {
+        if ("@Session["UserType"].ToString()" != "ADMN") {
+              window.location.href = '@Url.Action("ClientDashboard", "ClientDashboard", new { Area = "Client", userStatus = Session["UserStatus"].ToString() })';
+        } else {
+              window.location.href = '@Url.Action("AdminDashboard", "AdminDashboard",new { Area = "Admin" })';
+        }
+
+    }
+
+</script>

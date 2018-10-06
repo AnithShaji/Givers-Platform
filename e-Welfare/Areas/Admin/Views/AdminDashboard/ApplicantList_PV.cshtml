@@ -1,0 +1,195 @@
+﻿@model List<e_Welfare.DTO.ViewModel.ApplicantListingViewModel>
+@{
+    var inProcess = "NEW";
+    if (Model != null && Model.Count > 0)
+    {
+        inProcess = Model.FirstOrDefault().UserStatusCode;
+    }
+
+}
+
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Application #</th>
+                            @*<th>Section</th>*@
+                            <th>Applicant Name</th>
+                            <th>Request Date</th>
+                            <th>Attachment</th>
+
+                            @if (inProcess == "INP")
+                            {
+                                <th>Medical</th>
+                                <th>Education</th>
+                                <th>Food</th>
+                                <th>Activate Section</th>
+                            }
+                            else
+                            {
+                                if (inProcess == "NEW")
+                                {
+                                    <th>Status Approval</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var applicant in Model)
+                            {
+
+                                <tr>
+                                    <td>@applicant.ApplicantID</td>
+                                    @* <td>@applicant.SectionName</td>*@
+                                    <td>@applicant.ApplicantName</td>
+                                    <td>@applicant.RequstedDate</td>
+                                    @if (!string.IsNullOrEmpty(@applicant.AttachmentPath))
+                                    {
+                                        string tag = "<a style='cursor: pointer' href = '" + Url.Content(applicant.AttachmentPath) + "'> Attached File</a>";
+
+                                        <td> @Html.Raw(tag)</td>
+                                    }
+                                    else
+                                    {
+                                        <td> No Files Attached</td>
+                                    }
+
+
+                                    @if (inProcess == "INP")
+                                    {
+
+                                        <td align="center">
+                                            <input type="checkbox" disabled id="chkbxSection_@applicant.UserID" @(applicant.MedicalSection ? "checked=\"checked\"" : "") name="checkbox-inline">
+                                        </td>
+
+                                        <td align="center">
+                                            <input type="checkbox" disabled id="chkbxSection_@applicant.UserID" @(applicant.EducationSection ? "checked=\"checked\"" : "") name="checkbox-inline">
+                                        </td>
+                                        <td align="center">
+                                            <input type="checkbox" disabled id="chkbxSection_@applicant.UserID" @(applicant.FoodSection ? "checked=\"checked\"" : "") name="checkbox-inline">
+                                        </td>
+
+                                        <td align="center"><button type="button" title="Activate" class="btn btn-success btn-sm" onclick="ActivateClientSection(@applicant.UserID)">Activate</button></td>
+                                    }
+                                    else
+                                    {
+                                        if (inProcess == "NEW")
+                                        {
+                                            <td align="center">
+                                                <input type="checkbox" class="setNav" id="chkbxAccess_@applicant.UserID" @(applicant.ApprovalStatus ? "checked=\"checked\"" : "") name="checkbox-inline">
+                                            </td>
+                                        }
+                                    }
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+
+                            <tr><td colspan="6" align="center">--- No Applicant Listed ---</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="text-right">
+                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+                </div>*@
+            <hr />
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="smart-form">
+                        <fieldset>
+
+
+                            <section class="pull-right">
+                                <a class="btn btn-cancel btn-sm" title="Cancel" href="#" onclick="return HidePopup()">
+                                    Cancel
+                                </a>
+                                @*<a href="@Url.Action("RoleListing", "PatientListing", new { Area = "Client" })"><button type="button" title="Cancel" class="btn btn-cancel btn-sm">Cancel</button></a>*@
+                                @if (inProcess == "NEW")
+                                {
+
+                                    <button type="button" title="Save" id="SubmitNewApplicant" class="btn btn-primary btn-sm">Save</button>
+                                }
+                            </section>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+        function HidePopup()
+    {
+        window.location.href = '@Url.Action("AdminDashboard", "AdminDashboard",new { Area = "Admin" })';
+    }
+
+    function ActivateClientSection(userID) {
+
+                  $.ajax({
+                    url: '@Url.Action("ActivateClientSection")',
+                    type: "POST",
+                    data: { userID: userID},
+                    success: function (result) {
+
+
+                        SuccessMsgOkRedirct("Activated user section successfully.", "@Url.Action("AdminDashboard", "AdminDashboard", new { Area = "Admin" })");
+
+
+                //$('#excelDataTable').html("");
+                //buildHtmlTable(resultData, '#excelDataTable');
+
+            }
+        });
+    }
+
+
+    $("#SubmitNewApplicant").on("click", function (e) {
+
+
+        var chekdApplicantIds = [];
+
+        $("input:checkbox[class=setNav]").each(function () {
+
+            if ($(this).is(":checked")) {
+                var chekdApplicantId = $(this).attr("id").replace('chkbxAccess_', '');
+                chekdApplicantIds.push(chekdApplicantId);
+
+                //$(("#chkbxSetHome_" + $(this).attr("id").replace('chkbxAccess_', ''))).prop("disabled", false);
+            }
+        });
+
+
+                $.ajax({
+                    url: '@Url.Action("CheckApprovalStatus")',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+            type: "POST",
+            data: JSON.stringify(chekdApplicantIds),
+
+            success: function (result) {
+                SuccessMsgOkRedirct("User activated successfully.", "@Url.Action("AdminDashboard", "AdminDashboard", new { Area = "Admin" })");
+                @*SuccesMessage("Saved successfully.", "Information");
+                window.location.href = '@Url.Action("AdminDashboard", "AdminDashboard", new { Area = "Admin" })';*@
+
+
+            }
+        });
+
+
+    });
+</script>

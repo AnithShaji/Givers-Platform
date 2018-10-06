@@ -1,0 +1,113 @@
+﻿@model List<e_Welfare.DTO.ViewModel.FoodApplicantListingViewModel>
+<!-- Page Heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Food
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <i class="fa fa-medkit"></i> Food
+            </li>
+            <li class="active">
+                Applicant List
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Applicant List</h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Application #</th>
+
+                            <th>Applicant Name</th>
+                            <th>DOB</th>
+                            <th>Request Date</th>
+                            <th>Attachment</th>
+                            <th>Food Delivered</th>
+                            <th> Delivery Status </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        @if (Model != null && Model.Count > 0)
+                        {
+                            foreach (var applicant in Model)
+                            {
+                                <tr>
+                                    <td>@applicant.ApplicantStringID</td>
+
+                                    <td>@applicant.ApplicantName</td>
+                                    <td>@applicant.DOB</td>
+                                    <td>@applicant.RequstedDate</td>
+
+                                    @if (!string.IsNullOrEmpty(@applicant.Attachment))
+                                    {
+
+                                        string tag = "<a style='cursor: pointer' href = '" + Url.Content(applicant.Attachment) + "'><span class='glyphicon glyphicon-envelope'></span> Attached File</a>";
+
+                                        <td> @Html.Raw(tag)</td>
+                                    }
+
+                                    else
+                                    {
+                                        <td> No Files Attached</td>
+                                    }
+                                    @*<td>@applicant.Checked</td>*@
+                                    <td>@applicant.FoodItemString</td>
+                                    @if (applicant.DeliveryChecked)
+                                    {
+                                        <td align="center"><button type="button" title="Approved" class="btn btn-info btn-sm">Approved</button></td>
+                                    }
+                                    else
+                                    {
+                                        <td align="center"><button type="button" title="Pending" class="btn btn-danger btn-sm">Pending</button></td>
+                                    }
+
+                                    @{
+
+
+
+                                        <td>
+
+                                            <a style='cursor: pointer' onclick="LoadPatTab('addFoodApplicantTab',@applicant.ApplicantID)"><span title="Edit" class='glyphicon glyphicon-pencil'></span> </a>
+                                        </td>
+                                    }
+
+                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr><td colspan="7" align="center">--- No Patient Listed ---</td></tr>
+                                        }
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="text-right">
+                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+                </div>*@
+
+        </div>
+    </div>
+</div>
+<script>
+
+    function LoadPatTab(tab, medicineID) {
+
+        $(".overlay").show();
+        $("#content").load('@Url.Action("LoadContent", "ClientListing", new { Area = "Client" })', { tab: tab, userType: "CLNEW", extraDetail: medicineID }, function () {
+            setTimeout(function () { $(".overlay").hide(); }, 1000);
+            });
+        //}
+    }
+</script>

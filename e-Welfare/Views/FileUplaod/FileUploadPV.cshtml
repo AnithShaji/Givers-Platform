@@ -1,0 +1,27 @@
+﻿<div class="col-sm-6">
+    <label>File input</label>
+    <input type="file" name="FileUploaded" class="form-control-file" id="ProfileImagePath" aria-describedby="fileHelp" onclick="UploadFile();">
+    @*<small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>*@
+</div>
+
+
+<script>
+
+    function UploadFile() {
+      
+        $.ajax({
+            url: '@Url.Action("UploadFile", "File")',
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                if (data) {
+                    $(':input', '#myForm')
+                      .not(':button, :submit, :reset, :hidden')
+                      .val('')
+                      .removeAttr('checked')
+                      .removeAttr('selected');
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,292 @@
+﻿
+@model e_Welfare.DTO.ViewModel.UserRegistrationViewModel
+@*<link href="~/Content/css/plugins/datepicker/datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/plugins/datepicker/datepicker3.min.css" rel="stylesheet" />
+    <script src="~/Content/js/plugins/datepicker/bootstrap-datepicker.min.js"></script>*@
+
+
+<script type="text/javascript">
+    // In the view:
+      $(document).ready(function () {
+        @if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="1")
+        {
+            @:SuccesMessage("Registered successfully.", "Information");
+            TempData.Remove("SucessAlert");
+        }
+       else  if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="0")
+        {
+            @:ErrorMessage("Error while saving the records.", "Warning");
+            TempData.Remove("SucessAlert");
+        }
+        else if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="-1")
+        {
+            @:SuccesMessage("User exist with same email address.", "Information");
+            TempData.Remove("SucessAlert");
+        }
+    });
+</script>
+<script>
+  
+
+        //---Unobtrusive validation for PatientProfileViewModal(END)
+    $(document).ready(function () {
+        //$('#DOB')
+        //    .datepicker({
+        //        format: 'mm/dd/yyyy'
+        //    })
+        //    .on('changeDate', function(e) {
+        //        // Revalidate the date field
+        //        //$('#eventForm').formValidation('revalidateField', 'date');
+        //    });
+
+        //$('#eventForm').formValidation({
+        //    framework: 'bootstrap',
+        //    icon: {
+        //        valid: 'glyphicon glyphicon-ok',
+        //        invalid: 'glyphicon glyphicon-remove',
+        //        validating: 'glyphicon glyphicon-refresh'
+        //    },
+        //    fields: {
+        //        name: {
+        //            validators: {
+        //                notEmpty: {
+        //                    message: 'The name is required'
+        //                }
+        //            }
+        //        },
+        //        date: {
+        //            validators: {
+        //                notEmpty: {
+        //                    message: 'The date is required'
+        //                },
+        //                date: {
+        //                    format: 'MM/DD/YYYY',
+        //                    message: 'The date is not a valid'
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
+    });
+</script>
+<div class="container">
+   
+    @using (@Html.BeginForm("RegisterUser", "Home", FormMethod.Post, new { @class = "smart-form client-form login-form login active", enctype = "multipart/form-data" }))
+    {
+        <div class="jumbotron">
+
+            <h3> User Registration Form</h3>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <label for="FirstName">First Name<span class="mandatory">*</span></label>
+                    @*<input type="text" class="form-control" id="FirstName" autofocus="autofocus" placeholder="Enter First Name">*@
+                    @Html.TextBoxFor(m => m.FirstName, new { maxlength = "25", autofocus = "autofocus",Class= "form-control",Placeholder= "Enter First Name" })
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+
+                <div class="col-md-6">
+                    <label for="MiddleName">Middle Name<span class="mandatory">*</span></label>
+                    @*<input type="text" class="form-control" id="MiddleName" placeholder="Enter Middle Name">*@
+                    @Html.TextBoxFor(m => m.MiddleName, new { maxlength = "25", Class = "form-control", Placeholder = "Enter Middle Name" })
+                    @Html.ValidationMessageFor(model => model.MiddleName)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="LastName">Last Name<span class="mandatory">*</span></label>
+                    @*<input type="text" class="form-control" id="Lastname" autofocus="autofocus" placeholder="Enter Last Name">*@
+                    @Html.TextBoxFor(m => m.LastName, new { maxlength = "25", Class = "form-control", Placeholder = "Enter Last Name" })
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="EmailAddress">Email Address<span class="mandatory">*</span></label>
+                    @*<input type="text" class="form-control" id="EmailAddress" placeholder="Enter Email Address">*@
+                    @Html.TextBoxFor(m => m.EmailAddress, new { Class = "form-control", Placeholder = "Enter Email Address" })
+                    @Html.ValidationMessageFor(model => model.EmailAddress)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="Telephone">Telephone</label>
+                    @*<input type="text" class="form-control" id="Telephone" autofocus="autofocus" placeholder="Enter Telephone Number">*@
+                    @Html.TextBoxFor(m => m.Telephone, new { Class = "form-control", Placeholder = "Enter Telephone Number" })
+                 
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="Mobile">Mobile<span class="mandatory">*</span></label>
+                    @*<input type="text" class="form-control" id="Mobile" placeholder="Enter Mobile Number">*@
+                    @Html.TextBoxFor(m => m.Mobile, new { maxlength = "25", Class = "form-control", Placeholder = "Enter Mobile Number" })
+                    @Html.ValidationMessageFor(model => model.Mobile)
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <div class="col-sm-6">
+                    <label for="Address1">Address Line 1<span class="mandatory">*</span></label>
+                   @* <input type="text" class="form-control" id="Address1" placeholder="Enter Address Line 1">*@
+                    @Html.TextBoxFor(m => m.Address1, new { maxlength = "200", Class = "form-control", Placeholder = "Enter Address Line 1" })
+                    @Html.ValidationMessageFor(model => model.Address1)
+                </div>
+                <div class="col-sm-6">
+                    <label for="Address2">Address Line 2<span class="mandatory">*</span></label>
+                    @*<input type="text" class="form-control" id="Address2" placeholder="Enter Address Line 2">*@
+                @Html.TextBoxFor(m => m.Address2, new { maxlength = "200", Class = "form-control", Placeholder = "Enter Address Line 2" })
+                @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="FlatHouseNameNumber">Flat / House Number</label>
+                   @* <input type="text" class="form-control" id="FlatHouseNameNumber" placeholder="Enter Flat / House Number">*@
+                    @Html.TextBoxFor(m => m.FlatHouseNameNumber, new { Class = "form-control", Placeholder = "Enter Flat / House Number" })
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="City">City</label>
+                   @* <input type="text" class="form-control" id="City" placeholder="Enter City">*@
+                    @Html.TextBoxFor(m => m.City, new { Class = "form-control", Placeholder = "Enter City" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="FlatHouseNameNumber">Country</label>
+                    @* <input type="text" class="form-control" id="FlatHouseNameNumber" placeholder="Enter Flat / House Number">*@
+                    @Html.TextBoxFor(m => m.Country, new { Class = "form-control", Placeholder = "Enter Country" })
+                    @Html.ValidationMessageFor(model => model.Country)
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="City">Post Code</label>
+                    @* <input type="text" class="form-control" id="City" placeholder="Enter City">*@
+                    @Html.TextBoxFor(m => m.PostCode, new { Class = "form-control", Placeholder = "Enter Post Code" })
+                    @Html.ValidationMessageFor(model => model.PostCode)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*<div class="col-sm-6">
+                        <label for="DOB">Date of Birth</label>
+                        <input type="text" class="form-control" id="DOB" placeholder="Enter Date of Birth">
+                    </div>*@
+                @*<section>
+                        <label class="label">Date</label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.RefDate, new { Placeholder = "Select a date", Class = "form-control datepicker", ReadOnly = "readonly", Style = "cursor:pointer;" })
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </section>*@
+                <div class="col-sm-6">
+                    <label for="DOB">Date of Birth</label>
+                    <div class="date">
+                        <div class="input-group input-append date" id="datePicker">
+                            <input type="text" class="form-control" id="DOB" name="date" />
+                            @* <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>*@
+                        </div>
+                    </div>
+                </div>
+             @*@using (@Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { enctype="multipart/form-data"}))
+             {*@
+                <div class="col-sm-6">
+                    <label>File input</label>
+                    @Html.TextBoxFor(m => m.FileUpload, new { type = "file" })
+                    @Html.ValidationMessageFor(m => m.FileUpload)
+                    @*<input type="file" name="files" class="form-control-file"  aria-describedby="fileHelp">*@
+                    @*<small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>*@
+                
+                </div>
+             
+            </div>
+
+            @*<div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="exampleSelect1">Example select</label>
+                        <select class="form-control" id="exampleSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="exampleSelect2">Example multiple select</label>
+                        <select multiple class="form-control" id="exampleSelect2">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>*@
+            @*<div class="form-group">
+                    <div class="col-sm-6">
+                        <label for="exampleTextarea">Example textarea</label>
+                        <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                    </div>
+
+                </div>*@
+            @*<fieldset class="form-group">
+                    <legend>Radio buttons</legend>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                            Option one is this and that&mdash;be sure to include why it's great
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
+                            Option two can be something else and selecting it will deselect option one
+                        </label>
+                    </div>
+                    <div class="form-check disabled">
+                        <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+                            Option three is disabled
+                        </label>
+                    </div>
+                </fieldset>*@
+            @*<div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input">
+                        Check me out
+                    </label>
+                </div>*@
+            <button type="submit" id="RegSubmitBtn" title="Submit" class="btn btn-primary">Submit</button>
+
+        </div>
+    }
+</div>
+
+  <script type="text/javascript">
+
+    //    $(document).ready(function () {
+    ////---Unobtrusive validation for PatientProfileViewModal(START)
+    //var form = $('#register-form')
+    //    , formData = $.data(form[0])
+    //    , settings = formData.validator.settings
+    //    , oldErrorPlacement = settings.errorPlacement
+    //    , oldSuccess = settings.success;
+
+    //settings.errorPlacement = function (label, element) {
+    //    oldErrorPlacement(label, element);
+    //    label.parents('.form-control').addClass('has-error');
+    //    label.addClass('text-danger');
+    //};
+
+    //settings.success = function (label) {
+    //    label.parents('.form-control').removeClass('has-error');
+    //    oldSuccess(label);
+    //};
+    //});
+    </script>

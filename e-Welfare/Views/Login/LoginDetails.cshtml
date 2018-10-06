@@ -1,0 +1,117 @@
+﻿
+<script type="text/javascript">
+    // In the view:
+    $(document).ready(function () {
+
+        @if (TempData["Message"] != null && TempData["Message"].ToString()=="0")
+        {
+                  @:ErrorMessage("Login Failed! Please enter Username or Password", "Warning");
+            @TempData.Remove("Message");
+        }
+       else if (TempData["Message"] != null && TempData["Message"].ToString()=="-1")
+        {
+
+            @:ErrorMessage("Login Failed! Please enter a valid Username or Password", "Warning");
+            @TempData.Remove("Message");
+        }
+         @*else if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="2 ")
+        {
+            @:SuccesMessage("Updated successfully", "Information");
+            TempData.Remove("SucessAlert");
+        }*@
+    });
+</script>
+<div class="container">
+
+
+    @using (@Html.BeginForm("LoginDetails", "Login", FormMethod.Post, new { @class = "smart-form client-form login-form login active", @id = "login-form" }))
+    {
+        <div class="jumbotron">
+            @if (TempData["LoginType"] != null && TempData["LoginType"].ToString() == "Admin")
+            {
+                <h3> Admin Login</h3>
+            }
+            else
+            {
+                <h3> User Login</h3>
+            }
+
+
+            <div class="form-group">
+                @*<label for="usr">Name:</label>
+                    <input type="text" class="form-control" id="usr">*@
+                <label class="input">
+                    <i class="icon-prepend fa fa-user"></i>
+                    <input type="text" class="form-control" name="Username" id="Username" spellcheck="false" autofocus="autofocus" placeholder="Enter Username">
+                    @*<b class="tooltip tooltip-top-right"><i class="fa fa-user-login txt-color-teal"></i> Please enter email address/username</b>*@
+
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="input">
+                    <i class="icon-prepend fa fa-lock"></i>
+                    <input type="password" class="form-control" name="Password" id="Password" placeholder="Enter Password">
+                    @*<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Enter your password</b>*@
+                </label>
+            </div>
+            <div>
+                <button type="button" class="btn btn-default" id="cancel" title="Cancel" value="Cancel" onclick="ShowModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="signIn" title="Sign in" value="Sign in" onclick="ShowModal()">Sign in</button>
+            </div>
+            <div>
+                <a href="@Url.Action("ForgotPassword", "Login")" rel="forgot_password" title="Forgot password?" class="btn btn-link">Forgot password?</a>
+            </div>
+
+        </div>
+
+
+    }
+</div>
+
+
+
+@*<script>
+        $("#Username").keypress(function (e) {
+            if (e.which == 13) {
+                ShowModal();
+            }
+        })
+
+        $("#Password").keypress(function (e) {
+            if (e.which == 13) {
+
+                ShowModal();
+            }
+        })
+
+        function ShowModal() {
+            var url = "http://docs.google.com/gview?url=" + window.location + "/UserData/Disclaimer/DISCLAIMER.pdf&embedded=true"
+            var pdfUrl = '<iframe id= "iDisclaimer" src= ' + url + ' style="width: 100%; height: 500px;"  frameborder="0"></iframe>';
+            var $disclaimerPdf = $('<div></div>');
+            $disclaimerPdf.append(pdfUrl);
+            $disclaimerPdf.append('</br></br><p>Please click "Agree" to confirm you have read and agree to the disclaimer above.</p>');
+            BootstrapDialog.show({
+                title: 'Disclaimer',
+                message: $disclaimerPdf,
+                buttons: [{
+                    label: 'Cancel',
+                    cssClass: 'btn-default',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }, {
+                    label: 'Agree',
+                    cssClass: 'btn-primary',
+                    action: function (dialogRef) {
+                        $('#login-form').find('fieldset').append('<input type="hidden" name="disclaimerAccept" value="1"/>')
+                        //$('input[name=disclaimerAccept]').val(1);
+                        $('#login-form').submit();
+                        dialogRef.close();
+                    }
+                }]
+            });
+        }
+
+
+
+    </script>*@

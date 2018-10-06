@@ -1,0 +1,128 @@
+﻿
+
+
+
+
+
+@model e_Welfare.DTO.Users
+
+
+<div id="content">
+
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div>
+            <header>
+                <h2>Applicant Details</h2>
+            </header>
+            <div class="panel">
+
+                <form>
+                    @Html.HiddenFor(x => x.UserID)
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>First Name</label>
+                            @Html.TextBoxFor(m => m.FirstName, new { Class = "form-control", Placeholder = "Enter First Name", @disabled = "true" })
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Middle Name</label>
+                            @Html.TextBoxFor(m => m.MiddleName, new { Class = "form-control", Placeholder = "Enter Middle Name", @disabled = "true" })
+
+                        </div>
+                        <div class="col-md-4">
+                            <label>Last Name</label>
+                            @Html.TextBoxFor(m => m.LastName, new { Class = "form-control", Placeholder = "Enter Last Name", @disabled = "true" })
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <label>Address Line 1</label>
+                            @* <input type="text" class="form-control" id="Address1" placeholder="Enter Address Line 1">*@
+                            @Html.TextBoxFor(m => m.Address1, new { maxlength = "200", Class = "form-control", Placeholder = "Enter Address Line 1", @disabled = "true" })
+
+                        </div>
+                        <div class="col-md-4">
+                            <label>Address Line 2</label>
+                            @*<input type="text" class="form-control" id="Address2" placeholder="Enter Address Line 2">*@
+                            @Html.TextBoxFor(m => m.Address2, new { maxlength = "200", Class = "form-control", Placeholder = "Enter Address Line 2", @disabled = "true" })
+
+                        </div>
+                        <div class="col-md-4">
+                            <label>Flat / House Number</label>
+                            @* <input type="text" class="form-control" id="FlatHouseNameNumber" placeholder="Enter Flat / House Number">*@
+                            @Html.TextBoxFor(m => m.FlatHouseNameNumber, new { Class = "form-control", Placeholder = "Enter Flat / House Number", @disabled = "true" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-4">
+                            <label>City</label>
+                            @* <input type="text" class="form-control" id="City" placeholder="Enter City">*@
+                            @Html.TextBoxFor(m => m.City, new { Class = "form-control", Placeholder = "Enter City", @disabled = "true" })
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Country</label>
+                            @* <input type="text" class="form-control" id="City" placeholder="Enter City">*@
+                            @Html.TextBoxFor(m => m.Country, new { Class = "form-control", Placeholder = "Enter Country", @disabled = "true" })
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <label>Telephone</label>
+                            @*<input type="text" class="form-control" id="Telephone" autofocus="autofocus" placeholder="Enter Telephone Number">*@
+                            @Html.TextBoxFor(m => m.Telephone, new { Class = "form-control", Placeholder = "Enter Telephone Number", @disabled = "true" })
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-4">
+                            <label>Mobile<span class="mandatory">*</span></label>
+                            @*<input type="text" class="form-control" id="Mobile" placeholder="Enter Mobile Number">*@
+                            @Html.TextBoxFor(m => m.Mobile, new { maxlength = "25", Class = "form-control", Placeholder = "Enter Mobile Number", @disabled = "true" })
+
+
+                        </div>
+                        <div class="col-md-4">
+                            <label>Date of Birth</label>
+                            @Html.TextBoxFor(m => m.DOB, new { Class = "form-control", Placeholder = "Enter DOB", @disabled = "true" })
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+                </form>
+
+                
+
+            </div>
+
+        </div>
+    </article>
+
+
+
+</div>
