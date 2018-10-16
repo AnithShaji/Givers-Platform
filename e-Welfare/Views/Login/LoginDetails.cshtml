@@ -1,5 +1,7 @@
-﻿
-<script type="text/javascript">
+﻿@{
+    Layout = null;
+}
+@*<script type="text/javascript">
     // In the view:
     $(document).ready(function () {
 
@@ -14,13 +16,9 @@
             @:ErrorMessage("Login Failed! Please enter a valid Username or Password", "Warning");
             @TempData.Remove("Message");
         }
-         @*else if (TempData["SucessAlert"] != null && TempData["SucessAlert"].ToString()=="2 ")
-        {
-            @:SuccesMessage("Updated successfully", "Information");
-            TempData.Remove("SucessAlert");
-        }*@
+
     });
-</script>
+</script>*@
 <div class="container">
 
 
@@ -42,7 +40,7 @@
                     <input type="text" class="form-control" id="usr">*@
                 <label class="input">
                     <i class="icon-prepend fa fa-user"></i>
-                    <input type="text" class="form-control" name="Username" id="Username" spellcheck="false"  placeholder="Enter Username">
+                    <input type="text" class="form-control" name="Username" id="Username" spellcheck="false" placeholder="Enter Username">
                     @*<b class="tooltip tooltip-top-right"><i class="fa fa-user-login txt-color-teal"></i> Please enter email address/username</b>*@
 
                 </label>

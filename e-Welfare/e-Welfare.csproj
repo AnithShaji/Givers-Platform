@@ -278,7 +278,9 @@
     <Content Include="Content\img\freebie-03.jpg" />
     <Content Include="Content\img\freebie-04.jpg" />
     <Content Include="Content\img\hero-bg-01.jpg" />
+    <Content Include="Content\img\hero-bg-01T.jpg" />
     <Content Include="Content\img\hero-bg-02.jpg" />
+    <Content Include="Content\img\hero-bg-02T.jpg" />
     <Content Include="Content\img\hero-bg-03.jpg" />
     <Content Include="Content\img\historycover.jpg" />
     <Content Include="Content\img\landio-freebie.jpg" />
@@ -289,7 +291,8 @@
     <Content Include="Content\img\sliderMed.jpg" />
     <Content Include="Content\img\stats-bg.jpg" />
     <Content Include="Content\img\synthetica-logo%402x.png" />
-    <Content Include="Content\img\synthetica-logo.png" />
+    <Content Include="Content\img\synthetica-logo.jpeg" />
+    <Content Include="Content\img\synthetica-logo1.png" />
     <Content Include="Content\img\texture-shapes-bg.png" />
     <Content Include="Content\img\video-cover.jpg" />
     <Content Include="Content\js\bootstrap-dialog.min.js" />
